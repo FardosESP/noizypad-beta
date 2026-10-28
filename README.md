@@ -1,22 +1,31 @@
 # NoizyPad beta: control de copias
 
-Las copias beta de NoizyPad descargan `lease.json` de aquí cada 10 minutos. Va firmado, así que
-nadie puede falsificarlo, y caduca a las 48 horas. Una Action lo vuelve a firmar cada 12 horas.
+Cada exe de prueba lleva un **código de entrega** (lo dice `build-beta.sh` al compilar y va en el
+nombre del exe). Las copias descargan `lease.json` de aquí al abrir y cada 10 minutos: va firmado,
+así que nadie puede falsificarlo, y caduca a las 48 horas. Una Action lo vuelve a firmar cada 12 horas.
 
-**Si no tocas nada, las copias beta funcionan sin límite.**
+**Un exe funciona mientras su código esté en `builds`. Si no tocas nada, funciona sin límite.**
 
-## Bloquear
+## Activar o quitar una entrega
 
-Edita `control.json` (desde la web de GitHub vale) y haz commit. En un minuto se firma la nueva
-lease y en 10 minutos como mucho las copias afectadas se cierran (restauran el audio antes).
+Edita `control.json` (desde la web de GitHub vale) y haz commit:
 
-| Campo | Qué hace |
-|---|---|
-| `blocked_versions` | Versiones bloqueadas, p. ej. `["0.11.0"]` |
-| `min_version` | Bloquea todo lo anterior, p. ej. `"0.11.1"` |
-| `block_all` | `true` bloquea todas las copias beta |
+```json
+{
+  "block_all": false,
+  "builds": {
+    "k3x9q2m7ta": "0.11.0, entregada el 28/10 a los testers del Discord",
+    "p8w2n5r1zc": "0.11.1, entregada el 02/11"
+  }
+}
+```
 
-Para desbloquear, deshaz el cambio: las copias vuelven a abrir en cuanto descargan la nueva lease.
+- Añadir un código: ese exe abre.
+- Quitar un código: ese exe muestra "Esta versión de prueba ha terminado" en 10 minutos como mucho
+  (si estaba abierto, se cierra restaurando el audio antes).
+- `block_all: true`: se bloquean todas las copias beta.
+
+La nota de cada código es solo para ti: no la ve nadie en la app.
 
 Una copia sin internet sigue abriendo hasta que caduque su última lease (48 h como mucho), y
 después se bloquea hasta que se conecte.

@@ -1,5 +1,4 @@
 {
   "block_all": false,
-  "min_version": "0.0.0",
-  "blocked_versions": []
+  "builds": {}
 }
