@@ -1,0 +1,30 @@
+name: Renew lease
+on:
+  push:
+    branches: [main]
+    paths: [control.json, sign.mjs, .github/workflows/sign.yml]
+  schedule:
+    # Every 12 h. The lease lasts 48 h, so a few failed runs never block anyone.
+    - cron: '17 */12 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: lease
+  cancel-in-progress: false
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node sign.mjs
+        env:
+          LEASE_PRIVATE_KEY: ${{ secrets.LEASE_PRIVATE_KEY }}
+      # The commit also counts as activity, so GitHub never pauses this schedule.
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lease.json
+          git commit -m "Renew lease"
+          git pull --rebase
+          git push
