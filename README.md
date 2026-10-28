@@ -20,8 +20,8 @@ Edita `control.json` (desde la web de GitHub vale) y haz commit:
 }
 ```
 
-- Añadir un código: ese exe abre.
-- Quitar un código: ese exe muestra "Esta versión de prueba ha terminado" en 10 minutos como mucho
+- Añadir un código: ese exe abre (GitHub tarda hasta 5 minutos en servir el cambio).
+- Quitar un código: ese exe muestra "Esta versión de prueba ha caducado" en unos 15 minutos como mucho
   (si estaba abierto, se cierra restaurando el audio antes).
 - `block_all: true`: se bloquean todas las copias beta.
 
